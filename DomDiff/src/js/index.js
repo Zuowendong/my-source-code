@@ -1,6 +1,7 @@
 import { createElement, render, renderDom } from "./virtualDom";
+import domDiff from "./domDiff";
 
-const vDom = createElement('ul', {
+const vDom1 = createElement('ul', {
     class: 'list',
     style: 'width: 300px; height: 500px; background: #ccc;'
 }, [
@@ -34,9 +35,41 @@ const vDom = createElement('ul', {
     }, [
         '第3个列表项'
     ])
-])
+]);
 
-const rDOm = render(vDom);
+const vDom2 = createElement('ul', {
+    class: 'list-wrap',
+    style: 'width: 300px; height: 500px; background: #ccc;'
+}, [
+    createElement('li', {
+        class: 'item',
+        'data-index': 0
+    }, [
+        createElement('p', {
+            class: 'title',
+        }, [
+            '特殊列表项'
+        ])
+    ]),
+    createElement('li', {
+        class: 'item',
+        'data-index': 1
+    }, [
+        createElement('p', {
+            class: 'text'
+        }, [])
+    ]),
+    createElement('div', {
+        class: 'item',
+        'data-index': 2
+    }, [
+        '第3个列表项'
+    ])
+]);
+
+const rDOm = render(vDom1);
 renderDom(rDOm, document.getElementById("app"));
-console.log(rDOm);
-console.log(vDom);
+
+const patches = domDiff(vDom1, vDom2);
+console.log(patches)
+
