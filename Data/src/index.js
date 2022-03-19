@@ -16,4 +16,5 @@ let vm = new Vue({
     }
 })
 
-console.log("Test: ", vm.classNum);
+vm.students.push({ id: 3, name: "bert" });
+console.log("Test: ", vm.students);

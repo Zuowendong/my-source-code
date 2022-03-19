@@ -1,3 +1,5 @@
+import { arrMethods } from "./array";
+import observeArr from "./observeArr";
 import defineReactiveData from "./reactive";
 
 function Observer(data) {
@@ -6,8 +8,17 @@ function Observer(data) {
      * 数组是重写原生操作方法
      */
     if (Array.isArray(data)) {
-        console.log(1111, data);
+
+        /**
+         * 数组的重写处理
+         * 在原型链上新增自己写的方法，优先取这些方法处理数组
+         * 数组中还有数组调用observeArr递归观察
+         */
+        data.__proto__ = arrMethods;
+        observeArr(data);
     } else {
+
+        // 对象的拦截处理
         this.walk(data);
     }
 }
