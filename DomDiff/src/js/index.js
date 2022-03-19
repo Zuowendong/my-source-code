@@ -1,5 +1,6 @@
 import { createElement, render, renderDom } from "./virtualDom";
 import domDiff from "./domDiff";
+import doPatch from "./doPatch";
 
 const vDom1 = createElement('ul', {
     class: 'list',
@@ -43,6 +44,7 @@ const vDom2 = createElement('ul', {
 }, [
     createElement('li', {
         class: 'item',
+        style: 'color: red',
         'data-index': 0
     }, [
         createElement('p', {
@@ -71,5 +73,6 @@ const rDOm = render(vDom1);
 renderDom(rDOm, document.getElementById("app"));
 
 const patches = domDiff(vDom1, vDom2);
+doPatch(rDOm, patches);
 console.log(patches)
 
