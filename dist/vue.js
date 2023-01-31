@@ -4,9 +4,17 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Vue = factory());
 })(this, (function () { 'use strict';
 
-  function Vue() {
-    console.log("vue");
+  function initMixin(Vue) {
+    Vue.prototype._init = function (options) {
+      console.log("vue", options);
+    };
   }
+
+  function Vue(options) {
+    // 初始化
+    this._init(options);
+  }
+  initMixin(Vue);
 
   return Vue;
 
