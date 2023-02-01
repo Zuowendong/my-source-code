@@ -50,6 +50,49 @@
     return typeof key === "symbol" ? key : String(key);
   }
 
+  /**
+   * 重写 数组 方法
+   * 1. 获取原来的数组方法
+   * 2. 继承
+   * 3. 劫持
+   */
+
+  // 1
+  var oldArrayPortoMethods = Array.prototype;
+  // 2
+  var ArrayMethods = Object.create(oldArrayPortoMethods);
+  // 3
+  var methods = ["push", "pop", "unshift", "shift", "splice"];
+  methods.forEach(function (item) {
+    ArrayMethods[item] = function () {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      // console.log("劫持数组", args); // {list: [1,2,3,4]}
+      var result = oldArrayPortoMethods[item].apply(this, args); // this -> [1,2,3,4]
+
+      // 对象数组 追加 对象的情况  -> vm._data.arr.push({ name: "lucy" })  name: 'lucy' 未劫持
+      var inserted;
+      switch (item) {
+        case "push":
+        case "unshfit":
+          inserted = args; // args -> 追加的 参数
+          break;
+        case "splice":
+          // arr.splice(2, 0,{name: 'lucy'})  -> args -> [2,0,{name: 'lucy'}]
+          inserted = args.splice(2); // 只取 参数 {name: 'lucy'}
+          break;
+      }
+      // console.log(inserted, this);
+      var ob = this.__ob__;
+      if (inserted) {
+        ob.observerArray(inserted); // 对追加的对象进行劫持
+      }
+
+      return result;
+    };
+  });
+
   function observer(data) {
     // console.log(data);
     if (_typeof(data) != "object" || data == null) return data;
@@ -61,7 +104,23 @@
   var Observer = /*#__PURE__*/function () {
     function Observer(value) {
       _classCallCheck(this, Observer);
-      this.walk(value); // 遍历 对 对象一层中每个属性劫持
+      // 给每个对象添加一个 __ob__ 属性
+      Object.defineProperty(value, "__ob__", {
+        enumerable: false,
+        //不可枚举,
+        value: this // Observer 实例  -> 可以拿到它的observerArray方法
+      });
+
+      // 判断数据 是 对象 还是 数组类型
+      if (Array.isArray(value)) {
+        // console.log("数组"); // list: [1,2,3,4]
+        value.__proto__ = ArrayMethods;
+        // 对象数组情况  -> [{ name: "jack" }, { name: "tom" }], name 未劫持
+        this.observerArray(value); // 处理 数组中对象 劫持
+      } else {
+        // 对象
+        this.walk(value); // 遍历 对 对象一层中每个属性劫持
+      }
     }
     _createClass(Observer, [{
       key: "walk",
@@ -72,6 +131,13 @@
           var key = keys[i]; // msg
           var value = data[key]; // Hello
           defineReactive(data, key, value);
+        }
+      }
+    }, {
+      key: "observerArray",
+      value: function observerArray(value) {
+        for (var i = 0; i < value.length; i++) {
+          observer(value[i]);
         }
       }
     }]);
@@ -92,6 +158,18 @@
       }
     });
   }
+
+  /**
+   * 总结 对象
+   * 1. Object.defineProperty 有缺点: 只能对对象中一个属性进行劫持
+   * 2. 遍历 data 中每个属性
+   * 3. 递归 get set
+   */
+
+  /**
+   * 数组 [1,2,3,4]  [{name: 'jack'}, {name: 'tom'}]
+   * 函数劫持, 重写数组方法
+   */
 
   function initState(vm) {
     var opts = vm.$options;

@@ -17,12 +17,14 @@
 					console.log(this); // 没有call -> 指向 Window
 					return {
 						msg: "Hello",
-						info: { name: "jack" },
+						// info: { name: "jack" },
+						list: [1, 2, 3, 4],
+						arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
 					};
 				},
 			});
 
-			console.log((vm._data.info = { name: "tom" }));
+			console.log(vm._data.arr.splice(2, 0, { name: "lucy" })); // name: 'lucy' 未劫持
 		</script>
 	</body>
 </html>
