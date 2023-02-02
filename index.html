@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vue</title>
-	</head>
-	<body>
-		<div id="app">{{ msg }} Vue</div>
-		<script src="./dist/vue.js"></script>
-		<script>
-			let vm = new Vue({
-				el: "#app",
-				// data: {},
-				data() {
-					// console.log(this); // 没有call -> 指向 Window
-					return {
-						msg: "Hello",
-						// info: { name: "jack" },
-						list: [1, 2, 3, 4],
-						arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
-					};
-				},
-			});
-		</script>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue</title>
+  </head>
+  <body>
+    <div id="app">{{ msg }} Vue</div>
+    <script src="./dist/vue.js"></script>
+    <script>
+      let vm = new Vue({
+        el: "#app",
+        // data: {},
+        data() {
+          // console.log(this); // 没有call -> 指向 Window
+          return {
+            msg: "Hello",
+            // info: { name: "jack" },
+            list: [1, 2, 3, 4],
+            arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
+          };
+        },
+      });
+    </script>
+  </body>
 </html>
