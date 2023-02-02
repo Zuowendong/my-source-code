@@ -49,11 +49,11 @@ function defineReactive(data, key, value) {
 	observer(value); // 深度代理 -> 递归处理当前属性的值 (如果还是个对象的话) -> {name: 'jack'}
 	Object.defineProperty(data, key, {
 		get() {
-			console.log("获取");
+			// console.log("获取");
 			return value;
 		},
 		set(newValue) {
-			console.log("设置");
+			// console.log("设置");
 			if (newValue === value) return;
 			observer(newValue); // 处理 对象赋的 新值不响应 问题  -> vm._data.info = { name: "tom" } name属性不响应
 			value = newValue;

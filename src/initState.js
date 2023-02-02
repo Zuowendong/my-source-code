@@ -2,7 +2,7 @@ import { observer } from "./observer/index";
 
 export function initState(vm) {
 	let opts = vm.$options;
-	console.log(opts);
+	// console.log(opts);
 	// 各配置项初始化
 	if (opts.props) {
 		initProps(vm);

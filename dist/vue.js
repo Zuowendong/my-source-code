@@ -147,11 +147,11 @@
     observer(value); // 深度代理 -> 递归处理当前属性的值 (如果还是个对象的话) -> {name: 'jack'}
     Object.defineProperty(data, key, {
       get: function get() {
-        console.log("获取");
+        // console.log("获取");
         return value;
       },
       set: function set(newValue) {
-        console.log("设置");
+        // console.log("设置");
         if (newValue === value) return;
         observer(newValue); // 处理 对象赋的 新值不响应 问题  -> vm._data.info = { name: "tom" } name属性不响应
         value = newValue;
@@ -173,7 +173,7 @@
 
   function initState(vm) {
     var opts = vm.$options;
-    console.log(opts);
+    // console.log(opts);
     // 各配置项初始化
     if (opts.props) ;
     if (opts.data) {
@@ -216,8 +216,32 @@
       vm.$options = options; // 挂载options方便后续使用
       // 初始化状态
       initState(vm);
+
+      // 渲染模板
+      if (vm.$options.el) {
+        vm.$mount(vm.$options.el);
+      }
+    };
+    Vue.prototype.$mount = function (el) {
+      // el < template < render
+      var vm = this;
+      el = document.querySelector(el);
+      if (!vm.$options.render) {
+        // 不存在render
+        if (!vm.$options.template && el) {
+          // 不存在template, 获取el outerHtml
+          el = el.outerHTML; // <div id="app">{{ msg }} Vue</div>
+        }
+      }
     };
   }
+
+  /**
+   * vue初次渲染过程  -> 先初始化数据  -> 将模板进行编译  ->  变成render()  ->  生辰虚拟节点vnode  ->  变成真实的dom  ->  放在页面上
+   *
+   * vue模板编译的方式 render  template  el  (注意： 必须有el才能挂载app)
+   * 优先级 render > template > el
+   */
 
   function Vue(options) {
     // 初始化

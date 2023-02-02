@@ -7,14 +7,14 @@
 		<title>Vue</title>
 	</head>
 	<body>
-		<div id="app">Hello Vue</div>
+		<div id="app">{{ msg }} Vue</div>
 		<script src="./dist/vue.js"></script>
 		<script>
 			let vm = new Vue({
 				el: "#app",
 				// data: {},
 				data() {
-					console.log(this); // 没有call -> 指向 Window
+					// console.log(this); // 没有call -> 指向 Window
 					return {
 						msg: "Hello",
 						// info: { name: "jack" },
@@ -23,8 +23,6 @@
 					};
 				},
 			});
-
-			console.log((vm.msg = 100));
 		</script>
 	</body>
 </html>
