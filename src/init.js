@@ -1,4 +1,5 @@
 import { initState } from "./initState";
+import { compileToFunction } from "./compiler/index";
 
 export function initMixin(Vue) {
 	Vue.prototype._init = function (options) {
@@ -14,6 +15,13 @@ export function initMixin(Vue) {
 		}
 	};
 
+	/**
+	 * vue初次渲染过程  -> 先初始化数据  -> 将模板进行编译  ->  变成render()  ->  生辰虚拟节点vnode  ->  变成真实的dom  ->  放在页面上
+	 *
+	 * vue模板编译的方式 render  template  el  (注意： 必须有el才能挂载app)
+	 * 优先级 render > template > el
+	 */
+
 	Vue.prototype.$mount = function (el) {
 		// el < template < render
 		let vm = this;
@@ -23,14 +31,11 @@ export function initMixin(Vue) {
 			if (!vm.$options.template && el) {
 				// 不存在template, 获取el outerHtml
 				el = el.outerHTML; // <div id="app">{{ msg }} Vue</div>
+
+				// 编译成 ast 语法树
+				let ast = compileToFunction(el);
+				console.log(ast);
 			}
 		}
 	};
 }
-
-/**
- * vue初次渲染过程  -> 先初始化数据  -> 将模板进行编译  ->  变成render()  ->  生辰虚拟节点vnode  ->  变成真实的dom  ->  放在页面上
- *
- * vue模板编译的方式 render  template  el  (注意： 必须有el才能挂载app)
- * 优先级 render > template > el
- */
