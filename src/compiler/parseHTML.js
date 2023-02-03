@@ -23,6 +23,7 @@ const startTagClose = /^\s*(\/?)>/; // >
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`); // 结束标签 </span>
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/;
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // {{ }}
+const whitespaceRE = /[ \f\t\r\n]+/g;
 
 function createASTElement(tag, attrs) {
 	return {
@@ -52,7 +53,8 @@ function charts(text) {
 	// console.log(text); // 获取文本
 
 	// 处理空格
-	text = text.replace(/\s/g, "");
+	// text = text.replace(whitespaceRE, "");
+	text = text.trim();
 	if (text) {
 		createParent.children.push({
 			type: 3, // 文本节点
@@ -86,7 +88,7 @@ export function parseHTML(html) {
 			// 结束标签
 			let endTagMatch = html.match(endTag);
 			if (endTagMatch) {
-				// console.log(endTagMatch);
+				console.log(endTagMatch);
 				advance(endTagMatch[0].length);
 				end(endTagMatch[1]);
 				continue;

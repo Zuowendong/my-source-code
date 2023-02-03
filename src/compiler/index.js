@@ -5,7 +5,7 @@ export function compileToFunction(el) {
 	// console.log(el);
 	// 1. 将 html -> ast语法树
 	let ast = parseHTML(el);
-	console.log(ast);
+	// console.log(ast);
 	// 2. 将ast语法树 -> render函数  (ast -> 字符串  -> render())
 	let code = generate(ast);
 	// console.log(code);

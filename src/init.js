@@ -27,6 +27,7 @@ export function initMixin(Vue) {
 		// el < template < render
 		let vm = this;
 		el = document.querySelector(el);
+		vm.$el = el; // 存放旧的的dom
 		if (!vm.$options.render) {
 			// 不存在render
 			if (!vm.$options.template && el) {

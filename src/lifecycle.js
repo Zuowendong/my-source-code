@@ -1,5 +1,7 @@
+import { patch } from "./vnode/patch";
+
 export function mountComponent(vm, el) {
-	console.log(vm, el);
+	// console.log(vm, el);
 	vm._update(vm._render());
 	/**
 	 * 源码
@@ -10,5 +12,10 @@ export function mountComponent(vm, el) {
 }
 
 export function lifecycleMixin(Vue) {
-	Vue.prototype._update = function (vnode) {};
+	// 2
+	Vue.prototype._update = function (vnode) {
+		console.log(vnode);
+		let vm = this;
+		vm.$el = patch(vm.$el, vnode);
+	};
 }
