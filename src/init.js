@@ -1,5 +1,6 @@
 import { initState } from "./initState";
 import { compileToFunction } from "./compiler/index";
+import { mountComponent } from "./lifecycle";
 
 export function initMixin(Vue) {
 	Vue.prototype._init = function (options) {
@@ -32,10 +33,14 @@ export function initMixin(Vue) {
 				// 不存在template, 获取el outerHtml
 				el = el.outerHTML; // <div id="app">{{ msg }} Vue</div>
 
-				// 编译成 ast 语法树
-				let ast = compileToFunction(el);
-				console.log(ast);
+				// 编译成 ast 语法树 -> render()
+				let render = compileToFunction(el);
+				// console.log(render);
+				// 1. 将render() 变成 vnode  2. vnode 变成 真实dom 放到页面上
+				vm.$options.render = render;
 			}
 		}
+		// 挂载组件
+		mountComponent(vm, el);
 	};
 }

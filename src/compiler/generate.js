@@ -73,11 +73,10 @@ function genChild(node) {
 
 export function generate(ast) {
 	// console.log(ast);
-
 	let children = genChildren(ast);
-	let code = `_c(${ast.tag},${ast.attrs.length ? `${genProps(ast.attrs)}` : "null"},${
+	let code = `_c("${ast.tag}",${ast.attrs.length ? `${genProps(ast.attrs)}` : "null"},${
 		children ? `${children}` : "null"
 	})`;
-	console.log(code);
+	// console.log(code);
 	return code;
 }

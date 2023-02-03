@@ -142,5 +142,6 @@ export function parseHTML(html) {
 		// console.log(html); //  id="app">{{ msg }} Vue</div>
 	}
 
+	// console.log(root);
 	return root;
 }
