@@ -48,6 +48,10 @@
 				vm.list.unshift(100);
 				vm.msg = "Hi";
 				// vm._update(vm._render()); // 需要自动更新视图
+
+				vm.$nextTick(() => {
+					console.log("用户自定义nextTick");
+				});
 			}, 1000);
 			console.log(vm);
 			/**

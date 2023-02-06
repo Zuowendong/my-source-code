@@ -1,4 +1,5 @@
 import { pushTarget, popTarget } from "./dep";
+import { nextTick } from "../utils/nextTick";
 
 let id = 0;
 class Watcher {
@@ -55,21 +56,29 @@ function queueWatcher(watcher) {
 	// 去重
 	if (!has[id]) {
 		queue.push(watcher);
-		console.log(queue);
+		// console.log(queue);
 		has[id] = true;
 
 		// 防抖，用户触发多次，只执行一次
 		if (!pending) {
 			// 异步， 等待同步代码执行完成之后 再来执行
-			setTimeout(() => {
-				queue.forEach((item) => item.run());
-				queue = [];
-				has = {};
-				pending = false;
-			});
+			// setTimeout(() => {
+			// 	queue.forEach((item) => item.run());
+			// 	queue = [];
+			// 	has = {};
+			// 	pending = false;
+			// });
+			// 优化
+			nextTick(flushWatcher);
 		}
 		pending = true;
 	}
+}
+function flushWatcher() {
+	queue.forEach((item) => item.run());
+	queue = [];
+	has = {};
+	pending = false;
 }
 
 export default Watcher;
