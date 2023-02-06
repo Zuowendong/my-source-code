@@ -23,7 +23,7 @@ export function mountComponent(vm, el) {
 export function lifecycleMixin(Vue) {
 	// 2
 	Vue.prototype._update = function (vnode) {
-		// console.log(vnode);
+		console.log(vnode); // 每次数据更新 就需要 模板编译  -> 性能差
 		let vm = this;
 		vm.$el = patch(vm.$el, vnode);
 		// console.log(vm);

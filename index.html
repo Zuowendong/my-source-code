@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div id="app" style="color: red; font-size: 20px">
-			Vue {{ arr }}
+			Vue {{msg}} {{ arr }} {{ list }}
 			<h2 class="title">World</h2>
 		</div>
 
@@ -31,7 +31,7 @@
 				data() {
 					// console.log(this); // 没有call -> 指向 Window
 					return {
-						// msg: "Hello",
+						msg: "Hello",
 						// info: { name: "jack" },
 						list: [1, 2, 3, 4],
 						arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
@@ -43,7 +43,10 @@
 			});
 
 			setTimeout(() => {
+				// 数据更新多次，只需要vm._update(vm._render())执行一次   ->  批量处理（vue 异步， 数据更新之后不会马上执行）
 				vm.arr.push({ name: "lucy" });
+				vm.list.unshift(100);
+				vm.msg = "Hi";
 				// vm._update(vm._render()); // 需要自动更新视图
 			}, 1000);
 			console.log(vm);

@@ -19,5 +19,5 @@ export function compileToFunction(el) {
 
 // let obj = { a: 1, b: 2 };
 // with (obj) {
-// 	console.log(a, b);
+// console.log(a, b);
 // }

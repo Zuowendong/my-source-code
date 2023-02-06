@@ -2,7 +2,7 @@ import { ArrayMethods } from "./array";
 import Dep from "./dep";
 
 export function observer(data) {
-	console.log(data);
+	// console.log(data);
 	if (typeof data != "object" || data == null) return data;
 	// 对象
 	return new Observer(data);
@@ -57,7 +57,7 @@ function defineReactive(data, key, value) {
 
 	Object.defineProperty(data, key, {
 		get() {
-			console.log("获取", childDep);
+			// console.log("获取", childDep);
 
 			// 收集依赖
 			if (Dep.target) {
@@ -66,7 +66,7 @@ function defineReactive(data, key, value) {
 					childDep.dep.depend(); // 数组收集watcher
 				}
 			}
-			console.log(1111, dep);
+			// console.log(dep);
 
 			return value;
 		},

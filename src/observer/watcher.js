@@ -34,9 +34,41 @@ class Watcher {
 		this.getter(); // 渲染页面
 		popTarget(); // 给 dep 取消 watcher
 	}
-	// 更新
+	// 更新数据
 	update() {
-		this.get(); // 重新渲染
+		// 不要数据更新之后 每次都调用get  ->  缓存
+		// this.get(); // 重新渲染
+		queueWatcher(this);
+	}
+
+	run() {
+		this.get();
+	}
+}
+
+let queue = []; // 将需要批量更新的 watcher 存放到 队列中
+let has = {};
+let pending = false;
+function queueWatcher(watcher) {
+	let id = watcher.id; // 每个组件都是同一个 watcher
+	// console.log(id);
+	// 去重
+	if (!has[id]) {
+		queue.push(watcher);
+		console.log(queue);
+		has[id] = true;
+
+		// 防抖，用户触发多次，只执行一次
+		if (!pending) {
+			// 异步， 等待同步代码执行完成之后 再来执行
+			setTimeout(() => {
+				queue.forEach((item) => item.run());
+				queue = [];
+				has = {};
+				pending = false;
+			});
+		}
+		pending = true;
 	}
 }
 
