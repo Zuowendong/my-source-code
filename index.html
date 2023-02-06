@@ -14,6 +14,13 @@
 
 		<script src="./dist/vue.js"></script>
 		<script>
+			Vue.Mixin({
+				created: function a() {},
+			});
+			Vue.Mixin({
+				created: function b() {},
+			});
+
 			let vm = new Vue({
 				el: "#app",
 				// data: {},
@@ -27,6 +34,13 @@
 					};
 				},
 			});
+
+			/**
+			 *  vue 生命周期 实现原理
+			 * 1. Vue.minxin({}) 混入
+			 * 2. 设计模式 -> 订阅发布者模式
+			 *
+			 * */
 		</script>
 	</body>
 </html>
