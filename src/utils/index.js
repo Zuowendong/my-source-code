@@ -1,3 +1,9 @@
+/**
+ * vue 生命周期 实现原理
+ * 1. Vue.minxin({}) 混入
+ * 2. 设计模式 -> 订阅发布者模式
+ */
+
 export const HOOKS = [
 	"beforeCreate",
 	"created",
@@ -39,7 +45,7 @@ function mergeHook(parentVal, childVal) {
 }
 
 export function mergeOptions(parent, child) {
-	console.log(parent, child);
+	// console.log(parent, child);
 	// Vue.options = {created: [a,b,c], watch: [a,b,c]}
 	let options = {};
 	for (const key in parent) {

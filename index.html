@@ -16,12 +16,12 @@
 		<script>
 			Vue.Mixin({
 				created: function a() {
-					console.log("a-----全局的先调用");
+					// console.log("a-----全局的先调用");
 				},
 			});
 			Vue.Mixin({
 				created: function b() {
-					console.log("b-----全局的先调用");
+					// console.log("b-----全局的先调用");
 				},
 			});
 
@@ -38,16 +38,20 @@
 					};
 				},
 				created() {
-					console.log("调用生命周期函数");
+					// console.log("调用生命周期函数");
 				},
 			});
 
+			setTimeout(() => {
+				vm.msg = "Hi";
+				// vm._update(vm._render()); // 需要自动更新视图
+			}, 1000);
+			console.log(vm);
 			/**
-			 *  vue 生命周期 实现原理
-			 * 1. Vue.minxin({}) 混入
-			 * 2. 设计模式 -> 订阅发布者模式
-			 *
-			 * */
+			 * 无法自动更新视图的问题
+			 * 1. 数据变化自动更新视图 vm._update(vm._render())
+			 * 2. vue 中更新组件策略： 以组件为单位，给每个组件添加一个watcher, 属性变化后调用这个watcher
+			 */
 		</script>
 	</body>
 </html>

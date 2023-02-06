@@ -7,6 +7,6 @@ export function initGlobalApi(Vue) {
 	Vue.Mixin = function (mixin) {
 		// console.log(mixin);
 		this.options = mergeOptions(this.options, mixin); // this: vue实例
-		console.log(Vue.options);
+		// console.log(Vue.options);
 	};
 }

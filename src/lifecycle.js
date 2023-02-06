@@ -1,10 +1,16 @@
 import { patch } from "./vnode/patch";
-import { callHook } from "./lifecycle";
+import Watcher from "./observer/watcher";
 
 export function mountComponent(vm, el) {
 	// console.log(vm, el);
 	callHook(vm, "beforeMount"); // 页面加载之前调用
-	vm._update(vm._render());
+	// vm._update(vm._render());
+
+	let updateComponent = () => {
+		vm._update(vm._render());
+	};
+	new Watcher(vm, updateComponent, () => {}, true);
+
 	callHook(vm, "mounted"); // 页面加载之后调用
 	/**
 	 * 源码

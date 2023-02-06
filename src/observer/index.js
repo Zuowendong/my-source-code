@@ -1,4 +1,5 @@
 import { ArrayMethods } from "./array";
+import Dep from "../dep";
 
 export function observer(data) {
 	// console.log(data);
@@ -47,9 +48,19 @@ class Observer {
 // 对 对象中的属性 进行劫持
 function defineReactive(data, key, value) {
 	observer(value); // 深度代理 -> 递归处理当前属性的值 (如果还是个对象的话) -> {name: 'jack'}
+
+	let dep = new Dep(); // 给每个属性添加一个 dep
+
 	Object.defineProperty(data, key, {
 		get() {
 			// console.log("获取");
+
+			// 收集依赖
+			if (Dep.target) {
+				dep.depend();
+			}
+			console.log(dep);
+
 			return value;
 		},
 		set(newValue) {
@@ -57,6 +68,8 @@ function defineReactive(data, key, value) {
 			if (newValue === value) return;
 			observer(newValue); // 处理 对象赋的 新值不响应 问题  -> vm._data.info = { name: "tom" } name属性不响应
 			value = newValue;
+
+			dep.notify();
 		},
 	});
 }
