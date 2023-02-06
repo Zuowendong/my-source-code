@@ -12,7 +12,9 @@ export const HOOKS = [
 // 策略模式  -> 姐姐判断语句很多情况
 let starts = {};
 // 合并data
-starts.data = function () {};
+starts.data = function (parentVal, childVal) {
+	return childVal;
+};
 // 合并computed
 starts.computed = function () {};
 // 合并watch

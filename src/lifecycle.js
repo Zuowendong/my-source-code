@@ -1,8 +1,11 @@
 import { patch } from "./vnode/patch";
+import { callHook } from "./lifecycle";
 
 export function mountComponent(vm, el) {
 	// console.log(vm, el);
+	callHook(vm, "beforeMount"); // 页面加载之前调用
 	vm._update(vm._render());
+	callHook(vm, "mounted"); // 页面加载之后调用
 	/**
 	 * 源码
 	 * vm._update(vm._render())
@@ -14,8 +17,19 @@ export function mountComponent(vm, el) {
 export function lifecycleMixin(Vue) {
 	// 2
 	Vue.prototype._update = function (vnode) {
-		console.log(vnode);
+		// console.log(vnode);
 		let vm = this;
 		vm.$el = patch(vm.$el, vnode);
+		// console.log(vm);
 	};
+}
+
+// 生命周期的调用
+export function callHook(vm, hook) {
+	const handlers = vm.$options[hook];
+	if (handlers) {
+		for (let i = 0; i < handlers.length; i++) {
+			handlers[i].call(this); // 改变生命周期中的this指向问题
+		}
+	}
 }

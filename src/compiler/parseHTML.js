@@ -88,7 +88,7 @@ export function parseHTML(html) {
 			// 结束标签
 			let endTagMatch = html.match(endTag);
 			if (endTagMatch) {
-				console.log(endTagMatch);
+				// console.log(endTagMatch);
 				advance(endTagMatch[0].length);
 				end(endTagMatch[1]);
 				continue;

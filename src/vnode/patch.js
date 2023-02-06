@@ -1,5 +1,5 @@
 export function patch(oldEl, vnode) {
-	console.log(oldEl, vnode);
+	// console.log(oldEl, vnode);
 	// vnode -> 真实的dom
 
 	// 1. 创建 新的 dom
@@ -9,6 +9,9 @@ export function patch(oldEl, vnode) {
 	let parentEl = oldEl.parentNode;
 	parentEl.insertBefore(el, oldEl.nextsibling);
 	parentEl.removeChild(oldEl);
+
+	// console.log(el);
+	return el;
 }
 
 // 创建dom

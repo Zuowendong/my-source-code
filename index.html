@@ -15,10 +15,14 @@
 		<script src="./dist/vue.js"></script>
 		<script>
 			Vue.Mixin({
-				created: function a() {},
+				created: function a() {
+					console.log("a-----全局的先调用");
+				},
 			});
 			Vue.Mixin({
-				created: function b() {},
+				created: function b() {
+					console.log("b-----全局的先调用");
+				},
 			});
 
 			let vm = new Vue({
@@ -32,6 +36,9 @@
 						list: [1, 2, 3, 4],
 						arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
 					};
+				},
+				created() {
+					console.log("调用生命周期函数");
 				},
 			});
 
