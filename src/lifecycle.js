@@ -9,7 +9,14 @@ export function mountComponent(vm, el) {
 	let updateComponent = () => {
 		vm._update(vm._render());
 	};
-	new Watcher(vm, updateComponent, () => {}, true);
+	new Watcher(
+		vm,
+		updateComponent,
+		() => {
+			callHook(vm, "updated");
+		},
+		true
+	);
 
 	callHook(vm, "mounted"); // 页面加载之后调用
 	/**
@@ -23,7 +30,7 @@ export function mountComponent(vm, el) {
 export function lifecycleMixin(Vue) {
 	// 2
 	Vue.prototype._update = function (vnode) {
-		console.log(vnode); // 每次数据更新 就需要 模板编译  -> 性能差
+		// console.log(vnode); // 每次数据更新 就需要 模板编译  -> 性能差
 		let vm = this;
 		vm.$el = patch(vm.$el, vnode);
 		// console.log(vm);

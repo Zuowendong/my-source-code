@@ -27,7 +27,7 @@ if (Promise) {
 	};
 }
 export function nextTick(cb) {
-	console.log(cb); // 列队 [cb1, cb2]  -> cb1 是 vue自己的 更新数据的方法   cb2 用户自己写的方法
+	// console.log(cb); // 列队 [cb1, cb2]  -> cb1 是 vue自己的 更新数据的方法   cb2 用户自己写的方法
 	callback.push(cb);
 	// console.log(callback);
 	if (!pending) {

@@ -75,7 +75,10 @@ function queueWatcher(watcher) {
 	}
 }
 function flushWatcher() {
-	queue.forEach((item) => item.run());
+	queue.forEach((item) => {
+		item.run();
+		item.cb();
+	});
 	queue = [];
 	has = {};
 	pending = false;

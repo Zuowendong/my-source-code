@@ -24,7 +24,7 @@ starts.data = function (parentVal, childVal) {
 // 合并computed
 starts.computed = function () {};
 // 合并watch
-starts.watch = function () {};
+// starts.watch = function () {};
 // 合并methods
 starts.methods = function () {};
 // 合并生命周期

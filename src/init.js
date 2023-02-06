@@ -8,7 +8,7 @@ export function initMixin(Vue) {
 		// console.log("vue", options);
 		let vm = this; // vue实例
 		vm.$options = mergeOptions(Vue.options, options); // 挂载options方便后续使用
-		// console.log(vm);
+		console.log(vm);
 		callHook(vm, "beforeCreate");
 		// 初始化状态
 		initState(vm);

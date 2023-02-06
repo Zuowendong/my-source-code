@@ -23,7 +23,17 @@ export function initState(vm) {
 }
 
 function initProps() {}
-function initWatch() {}
+
+function initWatch(vm) {
+	let watch = vm.$options.watch;
+	console.log(watch);
+	// watch 是个对象，多个进行遍历
+	for (const key in watch) {
+		let handler = watch[key]; // 多种情况 (watch 的4种基本使用方式) ->  数组，对象，字符，函数
+		console.log(handler);
+	}
+}
+
 function initComputed() {}
 function initMethods() {}
 
