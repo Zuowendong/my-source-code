@@ -1,7 +1,7 @@
 let dep = 0;
 class Dep {
 	constructor() {
-		let id = dep++;
+		this.id = dep++;
 		this.subs = [];
 	}
 	// 收集watcher (收集依赖，在视图上用了几次都要收集起来)

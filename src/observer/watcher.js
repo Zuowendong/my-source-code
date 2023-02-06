@@ -1,4 +1,4 @@
-import { pushTarget, popTarget } from "../dep";
+import { pushTarget, popTarget } from "./dep";
 
 let id = 0;
 class Watcher {
@@ -7,7 +7,7 @@ class Watcher {
 		this.exprOrfn = updateComponent;
 		this.cb = cb;
 		this.options = options;
-		this.id = id++;
+		this.id = id++; // 标识 每个组件 都只有一个watcher
 		this.deps = []; // watcher存放dep
 		this.depsId = new Set();
 
@@ -17,16 +17,7 @@ class Watcher {
 		// 更新视图
 		this.get();
 	}
-	// 初次渲染 (更新 插值表达式)
-	get() {
-		pushTarget(this); // 给 dep 添加 watcher
-		this.getter(); // 渲染页面
-		popTarget(); // 给 dep 取消 watcher
-	}
-	// 更新
-	update() {
-		this.getter();
-	}
+
 	addDep(dep) {
 		// 去重 -> 存过的不能再存
 		let id = dep.id;
@@ -35,6 +26,17 @@ class Watcher {
 			this.depsId.add(id);
 			dep.addSub(this); // 双向记忆，dep里存放了watcher,watcher里存放了dep
 		}
+	}
+
+	// 初次渲染 (更新 插值表达式)
+	get() {
+		pushTarget(this); // 给 dep 添加 watcher
+		this.getter(); // 渲染页面
+		popTarget(); // 给 dep 取消 watcher
+	}
+	// 更新
+	update() {
+		this.get(); // 重新渲染
 	}
 }
 

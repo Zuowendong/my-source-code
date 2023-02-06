@@ -4,8 +4,8 @@ import Watcher from "./observer/watcher";
 export function mountComponent(vm, el) {
 	// console.log(vm, el);
 	callHook(vm, "beforeMount"); // 页面加载之前调用
-	// vm._update(vm._render());
 
+	// vm._update(vm._render());
 	let updateComponent = () => {
 		vm._update(vm._render());
 	};

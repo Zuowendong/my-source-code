@@ -8,7 +8,7 @@
 	</head>
 	<body>
 		<div id="app" style="color: red; font-size: 20px">
-			Vue {{ msg }}
+			Vue {{ arr }}
 			<h2 class="title">World</h2>
 		</div>
 
@@ -31,7 +31,7 @@
 				data() {
 					// console.log(this); // 没有call -> 指向 Window
 					return {
-						msg: "Hello",
+						// msg: "Hello",
 						// info: { name: "jack" },
 						list: [1, 2, 3, 4],
 						arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
@@ -43,16 +43,26 @@
 			});
 
 			setTimeout(() => {
-				vm.msg = "Hi";
+				vm.arr.push({ name: "lucy" });
 				// vm._update(vm._render()); // 需要自动更新视图
 			}, 1000);
 			console.log(vm);
 			/**
-			 * 无法自动更新视图的问题
+			 * 一 自动更新视图
 			 * 1. 数据变化自动更新视图 vm._update(vm._render())
 			 * 2. vue 中更新组件策略： 以组件为单位，给每个组件添加一个watcher, 属性变化后调用这个watcher
 			 *
+			 * 二 对象的收集依赖
+			 *
 			 * dep 和 watcher 多对多的关系  -> computed 缓存
+			 *
+			 * 三 数组的收集依赖
+			 * 实现思路
+			 * 1. 给所有对象类型增加一个dep （数组 也是 对象类型）
+			 * 2. 获取数组值，会调用get方法，让当前数组获取这个渲染的watcher
+			 * 		2.1 需要获取当前dep
+			 * 		2.2 当前面对数组取值时，让数组的dep记住这个watcher
+			 * 3. 更新数组时，即触发push等这些重写的数组方法时，找到这个watcher进行更新
 			 */
 		</script>
 	</body>

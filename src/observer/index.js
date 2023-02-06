@@ -1,8 +1,8 @@
 import { ArrayMethods } from "./array";
-import Dep from "../dep";
+import Dep from "./dep";
 
 export function observer(data) {
-	// console.log(data);
+	console.log(data);
 	if (typeof data != "object" || data == null) return data;
 	// 对象
 	return new Observer(data);
@@ -12,9 +12,13 @@ export function observer(data) {
 
 class Observer {
 	constructor(value) {
+		this.dep = new Dep(); // 给所有对象类型增加一个dep （数组 也是 对象类型）
+
 		// 给每个对象添加一个 __ob__ 属性
 		Object.defineProperty(value, "__ob__", {
 			enumerable: false, //不可枚举,
+			configurable: false,
+			// writable: true,
 			value: this, // Observer 实例  -> 可以拿到它的observerArray方法
 		});
 
@@ -47,19 +51,22 @@ class Observer {
 
 // 对 对象中的属性 进行劫持
 function defineReactive(data, key, value) {
-	observer(value); // 深度代理 -> 递归处理当前属性的值 (如果还是个对象的话) -> {name: 'jack'}
+	let childDep = observer(value); // 深度代理 -> 递归处理当前属性的值 (如果还是个对象的话) -> {name: 'jack'}
 
 	let dep = new Dep(); // 给每个属性添加一个 dep
 
 	Object.defineProperty(data, key, {
 		get() {
-			// console.log("获取");
+			console.log("获取", childDep);
 
 			// 收集依赖
 			if (Dep.target) {
 				dep.depend();
+				if (childDep.dep) {
+					childDep.dep.depend(); // 数组收集watcher
+				}
 			}
-			console.log(dep);
+			console.log(1111, dep);
 
 			return value;
 		},
