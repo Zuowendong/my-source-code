@@ -8,6 +8,8 @@ class Watcher {
 		this.cb = cb;
 		this.options = options;
 		this.id = id++;
+		this.deps = []; // watcher存放dep
+		this.depsId = new Set();
 
 		if (typeof updateComponent === "function") {
 			this.getter = updateComponent;
@@ -24,6 +26,15 @@ class Watcher {
 	// 更新
 	update() {
 		this.getter();
+	}
+	addDep(dep) {
+		// 去重 -> 存过的不能再存
+		let id = dep.id;
+		if (!this.depsId.has(id)) {
+			this.deps.push(dep);
+			this.depsId.add(id);
+			dep.addSub(this); // 双向记忆，dep里存放了watcher,watcher里存放了dep
+		}
 	}
 }
 

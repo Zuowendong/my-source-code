@@ -51,6 +51,8 @@
 			 * 无法自动更新视图的问题
 			 * 1. 数据变化自动更新视图 vm._update(vm._render())
 			 * 2. vue 中更新组件策略： 以组件为单位，给每个组件添加一个watcher, 属性变化后调用这个watcher
+			 *
+			 * dep 和 watcher 多对多的关系  -> computed 缓存
 			 */
 		</script>
 	</body>
