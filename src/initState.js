@@ -49,7 +49,7 @@ function initWatch(vm) {
  * @param {自定义配置，标识} options
  */
 function createWatcher(vm, exprOrfn, handler, options) {
-	console.log(handler);
+	// console.log(handler);
 	// 处理handler多种类型
 	if (typeof handler === "object") {
 		options = handler; // 用户配置项

@@ -25,56 +25,56 @@ const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // {{ }}
 const whitespaceRE = /[ \f\t\r\n]+/g;
 
-function createASTElement(tag, attrs) {
-	return {
-		tag, //元素标签
-		attrs, // 属性
-		children: [], // 子节点
-		type: 1,
-		parent: null,
-	};
-}
-let root; //根元素
-let createParent; // 当前元素的父节点
-// <div id="app">hello {{msg}} <h1>world</h1></div>
-// 栈  ->  开始标签入栈，遇到结束标签 出栈 最后的元素，那栈中最后一个元素就是当前标签的父元素  -> [<div>, <h1>] </h1>  ->  [<div>]  <h1></h1>
-let stack = [];
-
-function start(tag, attrs) {
-	// console.log(tag, attrs); // 开始标签
-	let element = createASTElement(tag, attrs);
-	if (!root) {
-		root = element;
-	}
-	createParent = element;
-	stack.push(element); // [<div>]
-}
-function charts(text) {
-	// console.log(text); // 获取文本
-
-	// 处理空格
-	// text = text.replace(whitespaceRE, "");
-	text = text.trim();
-	if (text) {
-		createParent.children.push({
-			type: 3, // 文本节点
-			text,
-		});
-	}
-}
-function end(tag) {
-	// console.log(tag); // 结束标签
-	let element = stack.pop(); // 遇到结束标签，出栈最后一个元素  -> 当前结束标签对应 的 开始标签  <h1></h1>
-	createParent = stack[stack.length - 1];
-	if (createParent) {
-		// 元素闭合
-		element.parent = createParent.tag;
-		createParent.children.push(element);
-	}
-}
-
 // 解析 Html -> ast 对象
 export function parseHTML(html) {
+	function createASTElement(tag, attrs) {
+		return {
+			tag, //元素标签
+			attrs, // 属性
+			children: [], // 子节点
+			type: 1,
+			parent: null,
+		};
+	}
+	let root; //根元素
+	let createParent; // 当前元素的父节点
+	// <div id="app">hello {{msg}} <h1>world</h1></div>
+	// 栈  ->  开始标签入栈，遇到结束标签 出栈 最后的元素，那栈中最后一个元素就是当前标签的父元素  -> [<div>, <h1>] </h1>  ->  [<div>]  <h1></h1>
+	let stack = [];
+
+	function start(tag, attrs) {
+		// console.log(tag, attrs); // 开始标签
+		let element = createASTElement(tag, attrs);
+		if (!root) {
+			root = element;
+		}
+		createParent = element;
+		stack.push(element); // [<div>]
+	}
+	function charts(text) {
+		// console.log(text); // 获取文本
+
+		// 处理空格
+		// text = text.replace(whitespaceRE, "");
+		text = text.trim();
+		if (text) {
+			createParent.children.push({
+				type: 3, // 文本节点
+				text,
+			});
+		}
+	}
+	function end(tag) {
+		// console.log(tag); // 结束标签
+		let element = stack.pop(); // 遇到结束标签，出栈最后一个元素  -> 当前结束标签对应 的 开始标签  <h1></h1>
+		createParent = stack[stack.length - 1];
+		if (createParent) {
+			// 元素闭合
+			element.parent = createParent.tag;
+			createParent.children.push(element);
+		}
+	}
+
 	while (html) {
 		// 判断标签
 		let textEnd = html.indexOf("<");
