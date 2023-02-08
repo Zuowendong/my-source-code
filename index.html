@@ -32,6 +32,11 @@
 					// console.log(this); // 没有call -> 指向 Window
 					return {
 						msg: "Hello",
+						info: {
+							name: {
+								msg: "Hi",
+							},
+						},
 						// info: { name: "jack" },
 						list: [1, 2, 3, 4],
 						arr: [{ name: "jack" }, { name: "tom" }], // name 未劫持
@@ -44,8 +49,36 @@
 					console.log("updated");
 				},
 				watch: {
-					msg(newVal) {
-						console.log(newVal);
+					// "info.name.msg"() {
+					// 	console.log("info");
+					// },
+
+					// 对象类型写法
+					// msg: {
+					// 	handler() {
+					// 		console.log("msg");
+					// 	},
+					// 	immediate: true,
+					// },
+					// 字符串类型写法
+					// msg: "getMsg",
+					// 函数类型写法
+					msg(newVal, oldVal) {
+						console.log(newVal, oldVal);
+					},
+					// 数组类型写法
+					// msg: [
+					// 	(newVal, oldVal) => {
+					// 		console.log(newVal, oldVal);
+					// 	},
+					// 	(newVal, oldVal) => {
+					// 		console.log(newVal, oldVal);
+					// 	},
+					// ],
+				},
+				methods: {
+					getMsg() {
+						console.log("getMsg");
 					},
 				},
 			});

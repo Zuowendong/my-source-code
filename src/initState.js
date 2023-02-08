@@ -1,5 +1,6 @@
 import { observer } from "./observer/index";
 import { nextTick } from "./utils/nextTick";
+import Watcher from "./observer/watcher";
 
 export function initState(vm) {
 	let opts = vm.$options;
@@ -26,12 +27,39 @@ function initProps() {}
 
 function initWatch(vm) {
 	let watch = vm.$options.watch;
-	console.log(watch);
+	// console.log(watch);
 	// watch 是个对象，多个进行遍历
 	for (const key in watch) {
 		let handler = watch[key]; // 多种情况 (watch 的4种基本使用方式) ->  数组，对象，字符，函数
-		console.log(handler);
+		// console.log(handler);
+		if (Array.isArray(handler)) {
+			handler.forEach((item) => createWatcher(vm, key, item));
+		} else {
+			createWatcher(vm, key, handler);
+		}
 	}
+}
+
+// vm.$watch(() => {return 'a'})
+/**
+ *
+ * @param {实例} vm
+ * @param {key或者表达式} exprOrfn
+ * @param {值} handler
+ * @param {自定义配置，标识} options
+ */
+function createWatcher(vm, exprOrfn, handler, options) {
+	console.log(handler);
+	// 处理handler多种类型
+	if (typeof handler === "object") {
+		options = handler; // 用户配置项
+		handler = handler.handler;
+	}
+	if (typeof handler === "string") {
+		handler = vm[handler]; // 将实例上的方法作为handler
+	}
+	// 函数
+	return vm.$watch(exprOrfn, handler, options);
 }
 
 function initComputed() {}
@@ -63,8 +91,20 @@ function proxy(vm, source, key) {
 	});
 }
 
-export function stateMixin(vm) {
-	vm.prototype.$nextTick = function (cb) {
+export function stateMixin(Vue) {
+	Vue.prototype.$nextTick = function (cb) {
 		nextTick(cb);
+	};
+
+	// 创建$watch
+	Vue.prototype.$watch = function (exprOrfn, handler, options = {}) {
+		// console.log(exprOrfn, handler, options);
+		// watch 核心 watcher
+		// console.log(this); // vm 实例
+		let watcher = new Watcher(this, exprOrfn, handler, { ...options, user: true });
+		// console.log(watcher);
+		if (options.immediate) {
+			handler.call(this); // immediate立即执行
+		}
 	};
 }

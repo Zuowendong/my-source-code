@@ -3,20 +3,33 @@ import { nextTick } from "../utils/nextTick";
 
 let id = 0;
 class Watcher {
-	constructor(vm, updateComponent, cb, options) {
+	constructor(vm, exprOrfn, cb, options) {
 		this.vm = vm;
-		this.exprOrfn = updateComponent;
+		this.exprOrfn = exprOrfn;
 		this.cb = cb;
 		this.options = options;
 		this.id = id++; // 标识 每个组件 都只有一个watcher
+		this.user = !!options.user;
 		this.deps = []; // watcher存放dep
 		this.depsId = new Set();
 
-		if (typeof updateComponent === "function") {
-			this.getter = updateComponent;
+		if (typeof exprOrfn === "function") {
+			this.getter = exprOrfn;
+		} else {
+			// console.log(exprOrfn); // 字符串  "info.name.msg"
+			this.getter = function () {
+				let paths = exprOrfn.split(".");
+				let _vm = vm;
+				for (let i = 0; i < paths.length; i++) {
+					_vm = _vm[paths[i]];
+				}
+				// console.log(_vm);
+				return _vm;
+			};
 		}
 		// 更新视图
-		this.get();
+		this.value = this.get(); // 保存 watch 初始值
+		// console.log(this.value);
 	}
 
 	addDep(dep) {
@@ -32,8 +45,9 @@ class Watcher {
 	// 初次渲染 (更新 插值表达式)
 	get() {
 		pushTarget(this); // 给 dep 添加 watcher
-		this.getter(); // 渲染页面
+		const value = this.getter(); // 渲染页面
 		popTarget(); // 给 dep 取消 watcher
+		return value;
 	}
 	// 更新数据
 	update() {
@@ -43,7 +57,15 @@ class Watcher {
 	}
 
 	run() {
-		this.get();
+		// watch 参数  newVal, oldVal
+		let value = this.get(); // newVal
+		let oldValue = this.value; // watch初始化时保存在实例上的值
+		this.value = value;
+
+		// 执行handler  -> cb 这个是用户的watch
+		if (this.user) {
+			this.cb.call(this.vm, value, oldValue);
+		}
 	}
 }
 
@@ -77,7 +99,6 @@ function queueWatcher(watcher) {
 function flushWatcher() {
 	queue.forEach((item) => {
 		item.run();
-		item.cb();
 	});
 	queue = [];
 	has = {};

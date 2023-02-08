@@ -2,6 +2,7 @@ export function patch(oldEl, vnode) {
 	// console.log(oldEl, vnode);
 	// vnode -> 真实的dom
 
+	// 暴力替换 -> 全部dom直接更换 -> 性能极差 -> vue采用 diff算法
 	// 1. 创建 新的 dom
 	let el = createEl(vnode);
 	// console.log(el);
