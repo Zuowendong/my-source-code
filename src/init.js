@@ -40,7 +40,7 @@ export function initMixin(Vue) {
 
 				// 编译成 ast 语法树 -> render()
 				let render = compileToFunction(el);
-				// console.log(render);
+				console.log(render);
 				// 1. 将render() 变成 vnode  2. vnode 变成 真实dom 放到页面上
 				vm.$options.render = render;
 			}

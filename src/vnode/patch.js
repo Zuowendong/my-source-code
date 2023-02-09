@@ -24,11 +24,11 @@ export function patch(oldVnode, vnode) {
 		return el;
 	} else {
 		// diff  ->  同一层级比较
-		console.log(oldVnode, vnode);
+		// console.log(oldVnode, vnode);
 
 		// 1. 标签元素不一样，直接替换
 		if (oldVnode.tag !== vnode.tag) {
-			console.log(oldVnode.el.parentNode);
+			// console.log(oldVnode.el.parentNode);
 			return oldVnode.el.parentNode.replaceChild(createEl(vnode), oldVnode.el);
 		}
 		// 文本对比  ->  tag: undefined
@@ -39,14 +39,53 @@ export function patch(oldVnode, vnode) {
 			}
 		}
 
-		// 属性
+		// 属性 <div id="a">a</div>  <div id=""b>b</div>
+		// 1 直接复制
+		let el = (vnode.el = oldVnode.el); // 保存旧dom
+		// updateProps(vnode, oldVnode.data);
+
+		// 处理子元素
+		let oldChildren = oldVnode.children || [];
+		let newChildren = vnode.children || [];
+		// 1. old(children) -> new(children)
+		if (oldChildren.length > 0 && newChildren.length > 0) {
+		} else if (oldChildren.length > 0) {
+			// 2. old (children)  -> new ([])
+			el.innerHTML = "";
+		} else if (newChildren.length > 0) {
+			// 3. old([]) -> new(children)
+			for (let i = 0; i < newChildren.length; i++) {
+				let child = newChildren[i];
+				// console.log(child);
+				el.appendChild(createEl(child)); // 追加真实dom
+			}
+		}
 	}
 }
 
 // 添加属性
-function createProps(vnode, oldProps = {}) {
+function updateProps(vnode, oldProps = {}) {
 	let newProps = vnode.data || {};
 	let el = vnode.el;
+
+	// 1. 老节点有属性，新的没有
+	for (let key in oldProps) {
+		if (!newProps[key]) {
+			// 删除
+			el.removeAttribute(key);
+		}
+	}
+
+	// style='color: red'  ->  style='background: blue'
+	let newStyle = newProps.style || {};
+	let oldStyle = oldProps.style || {};
+	for (let key in oldStyle) {
+		if (!newStyle[key]) {
+			el.style = "";
+		}
+	}
+
+	// 新的属性
 	for (let key in newProps) {
 		if (key === "style") {
 			for (let styleKey in newProps.style) {
@@ -59,7 +98,7 @@ function createProps(vnode, oldProps = {}) {
 			el.setAttribute(key, newProps[key]);
 		}
 	}
-	console.log(el);
+	// console.log(el);
 }
 
 // 创建dom   vnode -> dom
@@ -68,7 +107,7 @@ export function createEl(vnode) {
 	// 标签
 	if (typeof tag === "string") {
 		vnode.el = document.createElement(tag);
-		createProps(vnode);
+		// updateProps(vnode);
 		if (children && children.length) {
 			children.forEach((child) => {
 				vnode.el.appendChild(createEl(child));

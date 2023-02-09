@@ -26,7 +26,7 @@ function genProps(attrs) {
 const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/g; // {{ }}
 
 function genChildren(el) {
-	if (el.children) {
+	if (el.children && el.children.length) {
 		return el.children.map((child) => genChild(child)).join(",");
 	}
 }
@@ -74,9 +74,8 @@ function genChild(node) {
 export function generate(ast) {
 	// console.log(ast);
 	let children = genChildren(ast);
-	let code = `_c("${ast.tag}",${ast.attrs.length ? `${genProps(ast.attrs)}` : "null"},${
-		children ? `${children}` : "null"
-	})`;
+	// console.log(children);
+	let code = `_c("${ast.tag}",${ast.attrs.length ? `${genProps(ast.attrs)}` : ""},${children ? `${children}` : ""})`;
 	// console.log(code);
 	return code;
 }

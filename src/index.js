@@ -20,14 +20,16 @@ initGlobalApi(Vue);
 
 // 测试：创建两个vnode进行比对，更新
 let vm1 = new Vue({ data: { name: "张三" } });
-let render1 = compileToFunction(`<div id="a" class="name userName" style="color:blue;font-szie:20px">{{name}}</div>`);
+let render1 = compileToFunction(`<div id="a" class="name userName" style="color:blue;font-szie:20px"></div>`);
 let vnode1 = render1.call(vm1);
 document.body.appendChild(createEl(vnode1));
 
 let vm2 = new Vue({ data: { name: "李四" } });
-let render2 = compileToFunction(`<div id="b">{{name}}</div>`);
+let render2 = compileToFunction(`<div id="b" style='color:red'>{{name}}</div>`);
 let vnode2 = render2.call(vm2);
 
-patch(vnode1, vnode2);
+setTimeout(() => {
+	patch(vnode1, vnode2);
+}, 2000);
 
 export default Vue;
