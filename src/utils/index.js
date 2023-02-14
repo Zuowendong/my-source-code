@@ -15,7 +15,7 @@ export const HOOKS = [
 	"destoryed",
 ];
 
-// 策略模式  -> 姐姐判断语句很多情况
+// 策略模式  -> 判断语句很多情况
 let starts = {};
 // 合并data
 starts.data = function (parentVal, childVal) {

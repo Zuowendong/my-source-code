@@ -5,6 +5,7 @@ export function renderMixin(Vue) {
 	};
 	// 文本
 	Vue.prototype._v = function (text) {
+		// console.log(createText(text));
 		return createText(text);
 	};
 	// 变量
@@ -24,7 +25,6 @@ export function renderMixin(Vue) {
 		let vm = this;
 		let render = vm.$options.render;
 		let vnode = render.call(this);
-		// console.log(vnode);
 		return vnode;
 	};
 }
