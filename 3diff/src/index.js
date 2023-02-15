@@ -1,9 +1,10 @@
 import h from "./dom/h";
+import patch from "./dom/patch";
 
-let vnode1 = h("div", {}, "你好");
+// 真实dom
+let container = document.getElementById("container");
 
-console.log(vnode1);
-
+// 虚拟节点
+let vnode1 = h("span", {}, "你好");
 let vnode2 = h("ul", {}, [h("li", {}, "a"), h("li", {}, "b"), h("li", {}, "c")]);
-
-console.log(vnode2);
+patch(container, vnode2);
