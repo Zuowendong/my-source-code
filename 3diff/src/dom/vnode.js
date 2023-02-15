@@ -14,5 +14,6 @@ export default function (sel, data, children, text, elm) {
 		children,
 		text,
 		elm,
+		key: data.key,
 	};
 }

@@ -1,5 +1,6 @@
 import vnode from "./vnode";
 import creatElm from "./creatElm";
+import patchVnode from "./patchVnode";
 
 /**
  * @param {旧的虚拟节点} oldVnode
@@ -13,6 +14,7 @@ export default function (oldVnode, newVnode) {
 	// 判断 旧的虚拟节点 和 新的虚拟节点 是不是同一个节点
 	if (oldVnode.sel === newVnode.sel) {
 		// 判断条件很多了
+		patchVnode(oldVnode, newVnode);
 	} else {
 		// 不是同一个节点，暴力删除节点，创建插入新的节点
 		// 1. 创建新节点
