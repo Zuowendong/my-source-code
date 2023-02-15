@@ -47,10 +47,10 @@ export function patch(oldVnode, vnode) {
 		// 处理子元素
 		let oldChildren = oldVnode.children || [];
 		let newChildren = vnode.children || [];
-		debugger;
 		// 1. old(children) -> new(children)
 		if (oldChildren.length > 0 && newChildren.length > 0) {
 			// 双指针比对
+			console.log(oldChildren, newChildren);
 			updateChildren(el, oldChildren, newChildren);
 		} else if (oldChildren.length > 0) {
 			// 2. old (children)  -> new ([])
@@ -66,9 +66,47 @@ export function patch(oldVnode, vnode) {
 	}
 }
 
-function updateChildren(el, oldChildren, newChildren) {
+function updateChildren(parent, oldChildren, newChildren) {
 	// console.log(el, oldChildren, newChildren);
 	// 双指针比对
+	let oldStartIndex = 0; // 老的开头索引
+	let oldStartVnode = oldChildren[oldStartIndex]; // 老的第一个节点
+	let oldEndIndex = oldChildren.length - 1; // 老的结尾索引
+	let oldEndVnode = oldChildren[oldEndIndex]; // 老的最后一个节点
+
+	let newStartIndex = 0;
+	let newStartVnode = newChildren[newStartIndex];
+	let newEndIndex = newChildren.length - 1;
+	let newEndVnode = newChildren[newEndIndex];
+
+	function isSameVnode(oldEl, newEl) {
+		return oldEl.tag === newEl.tag && oldEl.key === newEl.key;
+	}
+
+	while (oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+		// 从头开始比对
+		if (isSameVnode(oldStartVnode, newStartVnode)) {
+			// 递归
+			patch(oldStartVnode, newStartVnode);
+			// 移动指针
+			oldStartVnode = oldChildren[++oldStartIndex];
+			newStartVnode = newChildren[++newStartIndex];
+		} else if (isSameVnode(oldEndVnode, newEndVnode)) {
+			// 递归
+			patch(oldEndVnode, newEndVnode);
+			oldStartVnode = oldChildren[--oldStartIndex];
+			newStartVnode = newChildren[--newStartIndex];
+		}
+	}
+
+	console.log(newStartIndex);
+
+	// 添加多余的子节点
+	if (newStartIndex <= newEndIndex) {
+		for (let i = newStartIndex; i <= newEndIndex; i++) {
+			parent.appendChild(createElm(newChildren[i]));
+		}
+	}
 }
 
 // 添加属性

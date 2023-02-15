@@ -21,14 +21,23 @@ initGlobalApi(Vue);
 // 测试：创建两个vnode进行比对，更新
 let vm1 = new Vue({ data: { name: "张三" } });
 let render1 = compileToFunction(
-	`<ul id="a" class="name userName" style="color:blue;font-szie:20px"><li class="liItem">{{name}}</li><li class="liItem">b</li><li class="liItem">c</li></ul>`
+	`<ul id="a" class="name userName" style="color:blue;font-szie:20px">
+	<li class="liItem" key="c">c</li>
+	<li class="liItem" key="b">b</li>
+	<li class="liItem" key="a">a</li>
+	</ul>`
 );
 let vnode1 = render1.call(vm1);
 console.log(vnode1);
 document.body.appendChild(createElm(vnode1));
 
 let vm2 = new Vue({ data: { name: "李四" } });
-let render2 = compileToFunction(`<ul id="b" style='color:red'><li class='bug'>{{name}}</li></ul>`);
+let render2 = compileToFunction(`<ul id="a" class="name userName" style="color:blue;font-szie:20px">
+<li class="liItem" key="d">d</li>
+<li class="liItem" key="c">c</li>
+<li class="liItem" key="b">b</li>
+<li class="liItem" key="a">a</li>
+</ul>`);
 let vnode2 = render2.call(vm2);
 
 setTimeout(() => {
