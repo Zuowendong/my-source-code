@@ -9,7 +9,6 @@ export function createApp(el, { refs, methods }) {
 	let refSet = createRefs(refs, allNodes);
 	render(refSet);
 	bindEvent.apply(refSet, [allNodes, methods]);
-	console.log("index.js", refSet);
 
 	// {
 	//   title: {

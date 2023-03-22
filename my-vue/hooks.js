@@ -6,6 +6,9 @@ export function ref(defaultValue) {
 		deps: new Set(),
 		_value: defaultValue,
 		_defaultValue: defaultValue,
+		$reset() {
+			this.value = this._defaultValue;
+		},
 	};
 
 	Object.defineProperty(refWrapper, "value", {

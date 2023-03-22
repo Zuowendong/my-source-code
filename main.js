@@ -22,5 +22,9 @@ createApp("#app", {
 		setContent() {
 			this.content.value = "这是内容";
 		},
+		reset() {
+			this.title.$reset();
+			this.content.$reset();
+		},
 	},
 });
