@@ -1,4 +1,4 @@
-import { reactive, watchEffect, watch } from "./my-vue";
+import { reactive, watchEffect, watch, computed } from "./my-vue";
 
 const oButtonA = document.querySelector("#aBtn");
 const oButtonC = document.querySelector("#cBtn");
@@ -10,6 +10,8 @@ let state = reactive({
 	},
 });
 
+const sum = computed(() => state.a + state.b.c);
+
 oButtonA.addEventListener(
 	"click",
 	() => {
@@ -17,6 +19,8 @@ oButtonA.addEventListener(
 		// console.log(state); // proxy { Target: {a:100, b: {c:2}} }
 		// proxy中的对象和state是同一个引用
 		// 但proxy 和 state 不是同一个引用
+
+		console.log("computed => ", sum.value);
 	},
 	false
 );
@@ -25,6 +29,7 @@ oButtonC.addEventListener(
 	"click",
 	() => {
 		state.b.c = 200;
+		console.log("computed => ", sum.value);
 	},
 	false
 );

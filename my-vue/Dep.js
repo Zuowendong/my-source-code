@@ -27,7 +27,10 @@ export default class Dep {
 		if (!depMap) return;
 		const deps = depMap.get(key);
 		deps.forEach((dep) => {
-			dep(value, oldValue);
+			const newValue = dep(value, oldValue);
+			if (dep.computedRef) {
+				dep.computedRef.value = newValue;
+			}
 		});
 	}
 }
