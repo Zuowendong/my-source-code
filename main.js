@@ -1,9 +1,9 @@
-import { reactive } from "./my-vue";
+import { reactive, watchEffect } from "./my-vue";
 
 const oButtonA = document.querySelector("#aBtn");
 const oButtonC = document.querySelector("#cBtn");
 
-let data = reactive({
+let state = reactive({
 	a: 1,
 	b: {
 		c: 2,
@@ -13,10 +13,10 @@ let data = reactive({
 oButtonA.addEventListener(
 	"click",
 	() => {
-		data.a = 100;
-		console.log(data); // proxy { Target: {a:100, b: {c:2}} }
-		// proxy中的对象和data是同一个引用
-		// 但proxy 和 data 不是同一个引用
+		state.a = 100;
+		// console.log(state); // proxy { Target: {a:100, b: {c:2}} }
+		// proxy中的对象和state是同一个引用
+		// 但proxy 和 state 不是同一个引用
 	},
 	false
 );
@@ -24,7 +24,14 @@ oButtonA.addEventListener(
 oButtonC.addEventListener(
 	"click",
 	() => {
-		data.b.c = 200;
+		state.b.c = 200;
 	},
 	false
 );
+
+watchEffect(() => {
+	console.log("watchEffect => state.a", state.a);
+});
+watchEffect(() => {
+	console.log("watchEffect => state.b.c", state.b.c);
+});
