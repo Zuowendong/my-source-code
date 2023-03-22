@@ -1,30 +1,30 @@
-/**
- * 考点
- *
- * 1. vue Options API
- * 2. vue Composition API
- * 3. this指向
- * 4. .value怎么做
- * 5. 响应式怎么做 -> 一对多 -> 依赖收集
- */
+import { reactive } from "./my-vue";
 
-import { createApp, ref } from "./my-vue";
+const oButtonA = document.querySelector("#aBtn");
+const oButtonC = document.querySelector("#cBtn");
 
-createApp("#app", {
-	refs: {
-		title: ref("this is title"),
-		content: ref("this is content"),
-	},
-	methods: {
-		setTitle() {
-			this.title.value = "这是标题";
-		},
-		setContent() {
-			this.content.value = "这是内容";
-		},
-		reset() {
-			this.title.$reset();
-			this.content.$reset();
-		},
+let data = reactive({
+	a: 1,
+	b: {
+		c: 2,
 	},
 });
+
+oButtonA.addEventListener(
+	"click",
+	() => {
+		data.a = 100;
+		console.log(data); // proxy { Target: {a:100, b: {c:2}} }
+		// proxy中的对象和data是同一个引用
+		// 但proxy 和 data 不是同一个引用
+	},
+	false
+);
+
+oButtonC.addEventListener(
+	"click",
+	() => {
+		data.b.c = 200;
+	},
+	false
+);
