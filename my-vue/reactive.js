@@ -21,9 +21,10 @@ export function reactive(data) {
 			return value !== null && typeof value === "object" ? reactive(value) : value;
 		},
 		set(target, key, value) {
+			const oldValue = target[key];
 			const res = Reflect.set(target, key, value);
 			// notify
-			dep.notify(target, key);
+			dep.notify(target, key, value, oldValue);
 			return res;
 		},
 	});

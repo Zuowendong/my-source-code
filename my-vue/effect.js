@@ -7,3 +7,9 @@ export function watchEffect(callback) {
 	callback();
 	Dep.effectCB = null;
 }
+
+export function watch(depFn, callback) {
+	Dep.effectCB = callback;
+	depFn();
+	Dep.effectCB = null;
+}

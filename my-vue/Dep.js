@@ -22,12 +22,12 @@ export default class Dep {
 		}
 	}
 
-	notify(target, key) {
+	notify(target, key, value, oldValue) {
 		const depMap = this.effectMap.get(target);
 		if (!depMap) return;
 		const deps = depMap.get(key);
 		deps.forEach((dep) => {
-			dep();
+			dep(value, oldValue);
 		});
 	}
 }

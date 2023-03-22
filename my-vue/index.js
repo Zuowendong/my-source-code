@@ -1,4 +1,4 @@
 import { reactive } from "./reactive";
-import { watchEffect } from "./effect";
+import { watchEffect, watch } from "./effect";
 
-export { reactive, watchEffect };
+export { reactive, watchEffect, watch };

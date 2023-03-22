@@ -1,4 +1,4 @@
-import { reactive, watchEffect } from "./my-vue";
+import { reactive, watchEffect, watch } from "./my-vue";
 
 const oButtonA = document.querySelector("#aBtn");
 const oButtonC = document.querySelector("#cBtn");
@@ -35,3 +35,19 @@ watchEffect(() => {
 watchEffect(() => {
 	console.log("watchEffect => state.b.c", state.b.c);
 });
+
+watch(
+	() => state.a,
+	(curr, pre) => {
+		console.log(curr, pre);
+		console.log("watch => state.a", state.a);
+	}
+);
+
+watch(
+	() => state.b.c,
+	(curr, pre) => {
+		console.log(curr, pre);
+		console.log("watch => state.b.c", state.b.c);
+	}
+);
