@@ -1,10 +1,15 @@
 import { ref, createRefs } from "./hooks";
+import { render } from "./render";
+import { bindEvent } from "./event";
 
 export function createApp(el, { refs, methods }) {
 	const $el = document.querySelector(el);
 	const allNodes = $el.querySelectorAll("*");
 
-	const refSet = createRefs(refs, allNodes);
+	let refSet = createRefs(refs, allNodes);
+	render(refSet);
+	bindEvent.apply(refSet, [allNodes, methods]);
+	console.log("index.js", refSet);
 
 	// {
 	//   title: {

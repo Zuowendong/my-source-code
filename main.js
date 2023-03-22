@@ -9,7 +9,6 @@
  */
 
 import { createApp, ref } from "./my-vue";
-console.log("index.js");
 
 createApp("#app", {
 	refs: {
